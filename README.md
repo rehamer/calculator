@@ -1,0 +1,3 @@
+# calculator
+
+Calculate monthly loan
