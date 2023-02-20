@@ -5,8 +5,6 @@ window.addEventListener('DOMContentLoaded', function() {
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       update();
-      calculateMonthlyPayment(update());
-      updateMonthly(calculateMonthlyPayment(update()));
     });
   }
 });
@@ -33,11 +31,8 @@ function setupIntialValues() {
 // Get the current values from the UI
 // Update the monthly payment
 function update() {
-  let P = setupIntialValues().P;
-  let i = setupIntialValues().i;
-  let n = setupIntialValues().n;
-  let monthlyPayment =  (P * i ) / (1 - (Math.pow(1 + i, -n))) / 12;
-  return monthlyPayment;
+  const currValues = getCurrentUIValues();
+  updateMonthly(calculateMonthlyPayment(currValues));
 }
 
 // Given an object of values (a value has amount, years and rate ),
@@ -45,6 +40,10 @@ function update() {
 // that always has 2 decimal places.
 
 function calculateMonthlyPayment(values) {
+  let P = values.amount;
+  let i = values.rate;
+  let n = values.years;
+  let monthlyPayment =  (P * i ) / (1 - (Math.pow(1 + i, -n))) / 12;
 
   // I managed to seach this online
   const formatter = new Intl.NumberFormat('en-US', {
@@ -52,7 +51,7 @@ function calculateMonthlyPayment(values) {
     currency: 'USD',
   });
 
-  return(formatter.format(values));
+  return(formatter.format(monthlyPayment));
 }
 
 // Given a string representing the monthly payment value,
